@@ -7,6 +7,8 @@ A native SwiftUI macOS app for reviewing and freeing disk space. Nothing is remo
 **Modules:** Smart Scan · System Junk · Developer Junk · Large & Old Files · Duplicates · Space Lens (treemap)
 
 ## Download
+Website: https://ravipiplani.github.io/deepcleaner/
+
 Get the latest DMG from [Releases](https://github.com/ravipiplani/deepcleaner/releases/latest) (universal: Apple silicon and Intel).
 Builds aren't notarized yet, so on first launch right-click the app and choose **Open**, then grant Full Disk Access.
 Re-grant Full Disk Access after each update.
