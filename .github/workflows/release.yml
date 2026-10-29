@@ -1,0 +1,73 @@
+name: Release
+
+# Every merge to main (which must pass the required CI check) ships a new patch release.
+# Bump major.minor by editing VERSION in a PR; the patch restarts at 0.
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['**.md', 'LICENSE']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build & Publish DMG
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Compute version
+        id: version
+        run: |
+          base="$(tr -d '[:space:]' < VERSION)"
+          last="$(git tag -l "v$base.*" --sort=-v:refname | head -1)"
+          if [[ -z "$last" ]]; then patch=0; else patch=$(( ${last##*.} + 1 )); fi
+          echo "version=$base.$patch" >> "$GITHUB_OUTPUT"
+          echo "Releasing $base.$patch (previous: ${last:-none})"
+
+      - name: Test
+        run: scripts/test.sh
+
+      - name: Build universal app
+        run: scripts/build-app.sh release
+        env:
+          UNIVERSAL: "1"
+          VERSION: ${{ steps.version.outputs.version }}
+          BUILD_NUMBER: ${{ github.run_number }}
+
+      # Developer ID signing and notarization (codesign --options runtime, notarytool, stapler)
+      # go here once an Apple Developer account is set up; the build is ad-hoc signed until then.
+
+      - name: Package DMG
+        run: scripts/make-dmg.sh
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          cat > notes.md <<'NOTES'
+          ## Install
+          1. Open the DMG and drag **DeepCleaner** to **Applications**.
+          2. This build isn't notarized yet, so the first time, right-click the app and choose **Open**
+             (or run `xattr -dr com.apple.quarantine /Applications/DeepCleaner.app`).
+          3. Grant **Full Disk Access** in System Settings → Privacy & Security. Re-grant it after
+             each update, since every build has a new ad-hoc signature.
+
+          Verify the download: `shasum -a 256 -c DeepCleaner-*.dmg.sha256`
+          NOTES
+          gh release create "v$VERSION" \
+            build/DeepCleaner-"$VERSION".dmg build/DeepCleaner-"$VERSION".dmg.sha256 \
+            --target "$GITHUB_SHA" \
+            --title "DeepCleaner $VERSION" \
+            --notes-file notes.md \
+            --generate-notes
