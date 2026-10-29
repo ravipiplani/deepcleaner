@@ -1,5 +1,7 @@
 # DeepCleaner
 
+[![CI](https://github.com/ravipiplani/deepcleaner/actions/workflows/ci.yml/badge.svg)](https://github.com/ravipiplani/deepcleaner/actions/workflows/ci.yml)
+
 A native SwiftUI macOS app for reviewing and freeing disk space. Nothing is removed until you review and confirm.
 
 **Modules:** Smart Scan · System Junk · Developer Junk · Large & Old Files · Duplicates · Space Lens (treemap)
