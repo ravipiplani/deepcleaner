@@ -26,3 +26,6 @@ Grant **Full Disk Access** (System Settings → Privacy & Security) so caches, l
 Every deletion goes through `SafetyGuard`, which requires the path to sit strictly inside the scan's roots and rejects
 system paths, top-level home folders, Keychains/Mail/iCloud and symlink escapes. Regenerable caches can be deleted
 permanently; everything else (large files, duplicates, archives) goes to the Trash. Docker's disk image is report-only.
+
+## License
+MIT — see [LICENSE](LICENSE). DeepCleaner deletes files: review what you select before cleaning. It is provided as is, without warranty.
