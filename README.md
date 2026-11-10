@@ -13,6 +13,10 @@ Get the latest DMG from [Releases](https://github.com/ravipiplani/deepcleaner/re
 Builds aren't notarized yet, so on first launch right-click the app and choose **Open**, then grant Full Disk Access.
 Re-grant Full Disk Access after each update.
 
+**Updates:** the app checks GitHub Releases on launch (at most every 12 hours) and via **DeepCleaner → Check for Updates…**.
+When a newer version exists, a banner appears at the bottom of the sidebar. Download the DMG and drag the new app over the
+old one; nothing is downloaded or installed automatically.
+
 ## Build & run
 ```sh
 scripts/build-app.sh          # → build/DeepCleaner.app (ad-hoc signed)

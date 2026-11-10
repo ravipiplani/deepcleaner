@@ -24,8 +24,14 @@ struct DeepCleanerApp: App {
                 .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
                     state.refreshSystemInfo()
                 }
+                .task { state.updates.checkAutomatically() }
         }
         .windowToolbarStyle(.unified)
+        .commands {
+            CommandGroup(after: .appInfo) {
+                Button("Check for Updates…") { state.updates.checkFromMenu() }
+            }
+        }
     }
 }
 
@@ -51,6 +57,11 @@ struct ContentView: View {
                 }
             }
             .navigationSplitViewColumnWidth(min: 200, ideal: 220)
+            .safeAreaInset(edge: .bottom) {
+                if let release = state.updates.bannerRelease {
+                    UpdateBanner(release: release) { state.updates.isSheetPresented = true }
+                }
+            }
         } detail: {
             switch state.selection ?? .dashboard {
             case .dashboard: DashboardView()
@@ -61,6 +72,12 @@ struct ContentView: View {
             case .duplicates: DuplicatesView()
             case .spaceLens: SpaceLensView()
             }
+        }
+        .sheet(isPresented: Binding(
+            get: { state.updates.isSheetPresented },
+            set: { state.updates.isSheetPresented = $0 }
+        )) {
+            UpdateSheet(model: state.updates)
         }
     }
 

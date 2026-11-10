@@ -57,6 +57,7 @@ final class AppState {
     let duplicates = CleanupModel()
     let docker = DockerModel()
     let spaceLens = SpaceLensModel()
+    let updates = UpdateModel()
 
     var projectRoots = DevJunkScanner.defaultProjectRoots()
     var largeFileMinSize: Int64 = 100 * 1_000_000
