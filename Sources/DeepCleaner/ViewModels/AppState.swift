@@ -3,7 +3,7 @@ import Foundation
 import Observation
 
 enum Module: String, CaseIterable, Identifiable, Hashable {
-    case dashboard, systemJunk, devJunk, largeFiles, duplicates, spaceLens
+    case dashboard, systemJunk, devJunk, docker, largeFiles, duplicates, spaceLens
 
     var id: String { rawValue }
 
@@ -12,6 +12,7 @@ enum Module: String, CaseIterable, Identifiable, Hashable {
         case .dashboard: "Smart Scan"
         case .systemJunk: "System Junk"
         case .devJunk: "Developer Junk"
+        case .docker: "Docker"
         case .largeFiles: "Large & Old Files"
         case .duplicates: "Duplicates"
         case .spaceLens: "Space Lens"
@@ -23,6 +24,7 @@ enum Module: String, CaseIterable, Identifiable, Hashable {
         case .dashboard: "sparkles"
         case .systemJunk: "trash.circle"
         case .devJunk: "hammer.circle"
+        case .docker: "cube.transparent"
         case .largeFiles: "doc.circle"
         case .duplicates: "doc.on.doc"
         case .spaceLens: "square.grid.3x3.square"
@@ -34,6 +36,7 @@ enum Module: String, CaseIterable, Identifiable, Hashable {
         case .dashboard: "Find junk across your Mac in one pass"
         case .systemJunk: "Caches, logs, crash reports, temporary files and Trash"
         case .devJunk: "Xcode data, package manager caches and stale node_modules"
+        case .docker: "Images, containers, volumes and build cache inside Docker's disk image"
         case .largeFiles: "Big files you may no longer need"
         case .duplicates: "Identical copies of the same file"
         case .spaceLens: "See what's taking up space, folder by folder"
@@ -52,6 +55,7 @@ final class AppState {
     let devJunk = CleanupModel()
     let largeFiles = CleanupModel()
     let duplicates = CleanupModel()
+    let docker = DockerModel()
     let spaceLens = SpaceLensModel()
 
     var projectRoots = DevJunkScanner.defaultProjectRoots()

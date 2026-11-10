@@ -38,21 +38,12 @@ struct ModuleScreen<Options: View>: View {
     }
 
     private var header: some View {
-        HStack(alignment: .center, spacing: 14) {
-            Image(systemName: module.symbol)
-                .font(.system(size: 30))
-                .foregroundStyle(.tint)
-            VStack(alignment: .leading, spacing: 2) {
-                Text(module.title).font(.title2.bold())
-                Text(module.subtitle).foregroundStyle(.secondary)
-            }
-            Spacer()
+        ModuleHeader(module: module) {
             options()
             if model.phase == .review || model.phase == .done {
                 Button("Rescan", systemImage: "arrow.clockwise", action: scan)
             }
         }
-        .padding([.horizontal, .top])
     }
 
     private var idle: some View {
@@ -73,6 +64,27 @@ struct ModuleScreen<Options: View>: View {
                 .foregroundStyle(.tertiary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+/// Module icon, title and subtitle, with controls on the trailing edge.
+struct ModuleHeader<Trailing: View>: View {
+    let module: Module
+    @ViewBuilder var trailing: () -> Trailing
+
+    var body: some View {
+        HStack(alignment: .center, spacing: 14) {
+            Image(systemName: module.symbol)
+                .font(.system(size: 30))
+                .foregroundStyle(.tint)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(module.title).font(.title2.bold())
+                Text(module.subtitle).foregroundStyle(.secondary)
+            }
+            Spacer()
+            trailing()
+        }
+        .padding([.horizontal, .top])
     }
 }
 

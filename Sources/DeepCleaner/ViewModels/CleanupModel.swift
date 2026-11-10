@@ -25,7 +25,7 @@ final class CleanupModel {
 
     var hasResults: Bool { !items.isEmpty }
     var totalSize: Int64 { items.reduce(0) { $0 + $1.size } }
-    var selectedItems: [ScanItem] { items.filter { selection.contains($0.id) && !$0.category.isReportOnly } }
+    var selectedItems: [ScanItem] { items.filter { selection.contains($0.id) } }
     var selectedSize: Int64 { selectedItems.reduce(0) { $0 + $1.size } }
     var selectionHasRegenerable: Bool { selectedItems.contains { $0.category.isRegenerable } }
 
@@ -62,7 +62,7 @@ final class CleanupModel {
             guard !Task.isCancelled else { return }
             items = result.items.sorted { $0.size > $1.size }
             allowedRoots = result.allowedRoots
-            selection = Set(result.items.filter { $0.selectedByDefault && !$0.category.isReportOnly }.map(\.id))
+            selection = Set(result.items.filter(\.selectedByDefault).map(\.id))
             lastScanned = Date()
             phase = .review
         }
@@ -106,7 +106,7 @@ final class CleanupModel {
     }
 
     func setGroup(_ items: [ScanItem], selected: Bool) {
-        let ids = items.filter { !$0.category.isReportOnly }.map(\.id)
+        let ids = items.map(\.id)
         if selected { selection.formUnion(ids) } else { selection.subtract(ids) }
     }
 }

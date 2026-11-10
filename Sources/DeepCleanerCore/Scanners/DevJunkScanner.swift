@@ -25,8 +25,7 @@ public struct DevJunkScanner: Sendable {
         let rules = JunkRules.developer(home: home)
         async let caches = RuleScanner(rules: rules).scan(progress: progress)
         async let modules = nodeModules(progress: progress)
-        var items = await caches.items + modules
-        if let docker = dockerItem() { items.append(docker) }
+        let items = await caches.items + modules
         return ScanResult(items: items, allowedRoots: rules.map(\.root) + projectRoots)
     }
 
@@ -86,15 +85,6 @@ public struct DevJunkScanner: Sendable {
             .max()
     }
 
-    func dockerItem() -> ScanItem? {
-        let raw = home.appendingPathComponent("Library/Containers/com.docker.docker/Data/vms/0/data/Docker.raw")
-        let size = SizeCalculator.allocatedSize(of: raw)
-        guard size > 0 else { return nil }
-        return ScanItem(
-            url: raw, size: size, category: .dockerData,
-            note: "Reclaim with `docker system prune -a` — DeepCleaner won't touch Docker's disk image"
-        )
-    }
 }
 
 /// Convenience wrapper so system junk mirrors the developer scanner's API.

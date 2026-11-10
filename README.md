@@ -4,7 +4,7 @@
 
 A native SwiftUI macOS app for reviewing and freeing disk space. Nothing is removed until you review and confirm.
 
-**Modules:** Smart Scan · System Junk · Developer Junk · Large & Old Files · Duplicates · Space Lens (treemap)
+**Modules:** Smart Scan · System Junk · Developer Junk · Docker · Large & Old Files · Duplicates · Space Lens (treemap)
 
 ## Download
 Website: https://ravipiplani.github.io/deepcleaner/
@@ -39,7 +39,9 @@ Every merge to `main` that touches more than docs publishes a GitHub release via
 ## Safety model
 Every deletion goes through `SafetyGuard`, which requires the path to sit strictly inside the scan's roots and rejects
 system paths, top-level home folders, Keychains/Mail/iCloud and symlink escapes. Regenerable caches can be deleted
-permanently; everything else (large files, duplicates, archives) goes to the Trash. Docker's disk image is report-only.
+permanently; everything else (large files, duplicates, archives) goes to the Trash. Docker's disk image is never touched
+directly: the Docker module lists images, containers, volumes and build cache via `docker system df` and removes only what
+you select through the Docker CLI (`docker rm`, `rmi`, `volume rm`, `builder prune`), never forcing anything in use.
 
 ## License
 MIT — see [LICENSE](LICENSE). DeepCleaner deletes files: review what you select before cleaning. It is provided as is, without warranty.

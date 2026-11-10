@@ -12,7 +12,7 @@ public enum JunkCategory: String, CaseIterable, Sendable, Identifiable, Hashable
     // Developer junk
     case xcodeDerivedData, xcodeArchives, xcodeDeviceSupport, simulatorCaches
     case nodeModules, homebrewCache, npmCache, yarnCache, pnpmStore, pipCache
-    case gradleCache, cargoCache, cocoapodsCache, genericCache, dockerData
+    case gradleCache, cargoCache, cocoapodsCache, genericCache
     // User files
     case largeFile, duplicate
 
@@ -51,7 +51,6 @@ public enum JunkCategory: String, CaseIterable, Sendable, Identifiable, Hashable
         case .cargoCache: "Cargo Registry"
         case .cocoapodsCache: "CocoaPods Cache"
         case .genericCache: "~/.cache"
-        case .dockerData: "Docker Disk Image"
         case .largeFile: "Large & Old Files"
         case .duplicate: "Duplicates"
         }
@@ -71,7 +70,6 @@ public enum JunkCategory: String, CaseIterable, Sendable, Identifiable, Hashable
         case .homebrewCache: "mug"
         case .pipCache: "chevron.left.forwardslash.chevron.right"
         case .gradleCache, .cargoCache, .cocoapodsCache: "cube.box"
-        case .dockerData: "server.rack"
         case .largeFile: "doc.richtext"
         case .duplicate: "doc.on.doc"
         }
@@ -80,7 +78,7 @@ public enum JunkCategory: String, CaseIterable, Sendable, Identifiable, Hashable
     /// Recreated automatically by the owning app or tool, so deleting permanently is safe.
     public var isRegenerable: Bool {
         switch self {
-        case .xcodeArchives, .mailDownloads, .largeFile, .duplicate, .dockerData, .trash: false
+        case .xcodeArchives, .mailDownloads, .largeFile, .duplicate, .trash: false
         default: true
         }
     }
@@ -88,11 +86,8 @@ public enum JunkCategory: String, CaseIterable, Sendable, Identifiable, Hashable
     /// Whether found items start out checked in the review list.
     public var selectedByDefault: Bool {
         switch self {
-        case .xcodeArchives, .mailDownloads, .genericCache, .dockerData, .largeFile, .duplicate, .trash: false
+        case .xcodeArchives, .mailDownloads, .genericCache, .largeFile, .duplicate, .trash: false
         default: true
         }
     }
-
-    /// Shown for information only; DeepCleaner never deletes these.
-    public var isReportOnly: Bool { self == .dockerData }
 }
