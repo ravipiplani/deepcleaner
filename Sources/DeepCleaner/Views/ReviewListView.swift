@@ -43,11 +43,10 @@ struct ReviewListView: View {
     }
 
     private func groupHeader(_ title: String, items: [ScanItem], size: Int64) -> some View {
-        let selectable = items.filter { !$0.category.isReportOnly }
-        let selectedCount = selectable.filter { model.selection.contains($0.id) }.count
-        let state: CheckState = selectedCount == 0 ? .off : selectedCount == selectable.count ? .on : .mixed
+        let selectedCount = items.filter { model.selection.contains($0.id) }.count
+        let state: CheckState = selectedCount == 0 ? .off : selectedCount == items.count ? .on : .mixed
         return HStack {
-            CheckboxButton(state: state, disabled: selectable.isEmpty) {
+            CheckboxButton(state: state) {
                 model.setGroup(items, selected: state != .on)
             }
             Text(title).font(.headline)
@@ -115,7 +114,7 @@ struct ItemRow: View {
 
     var body: some View {
         HStack(spacing: 10) {
-            CheckboxButton(state: isSelected ? .on : .off, disabled: item.category.isReportOnly, action: toggle)
+            CheckboxButton(state: isSelected ? .on : .off, action: toggle)
             Image(nsImage: NSWorkspace.shared.icon(forFile: item.url.path))
                 .resizable()
                 .frame(width: 22, height: 22)

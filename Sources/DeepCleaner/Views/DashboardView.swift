@@ -17,7 +17,7 @@ struct DashboardView: View {
                 }
                 Text("Tools").font(.title3.bold())
                 HStack(spacing: 16) {
-                    ForEach([Module.largeFiles, .duplicates, .spaceLens]) { module in
+                    ForEach([Module.docker, .largeFiles, .duplicates, .spaceLens]) { module in
                         ToolTile(module: module) { state.selection = module }
                     }
                 }

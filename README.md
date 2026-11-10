@@ -4,7 +4,7 @@
 
 A native SwiftUI macOS app for reviewing and freeing disk space. Nothing is removed until you review and confirm.
 
-**Modules:** Smart Scan · System Junk · Developer Junk · Large & Old Files · Duplicates · Space Lens (treemap)
+**Modules:** Smart Scan · System Junk · Developer Junk · Docker · Large & Old Files · Duplicates · Space Lens (treemap)
 
 ## Download
 Website: https://ravipiplani.github.io/deepcleaner/
@@ -12,6 +12,10 @@ Website: https://ravipiplani.github.io/deepcleaner/
 Get the latest DMG from [Releases](https://github.com/ravipiplani/deepcleaner/releases/latest) (universal: Apple silicon and Intel).
 Builds aren't notarized yet, so on first launch right-click the app and choose **Open**, then grant Full Disk Access.
 Re-grant Full Disk Access after each update.
+
+**Updates:** the app checks GitHub Releases on launch (at most every 12 hours) and via **DeepCleaner → Check for Updates…**.
+When a newer version exists, a banner appears at the bottom of the sidebar. Download the DMG and drag the new app over the
+old one; nothing is downloaded or installed automatically.
 
 ## Build & run
 ```sh
@@ -39,7 +43,9 @@ Every merge to `main` that touches more than docs publishes a GitHub release via
 ## Safety model
 Every deletion goes through `SafetyGuard`, which requires the path to sit strictly inside the scan's roots and rejects
 system paths, top-level home folders, Keychains/Mail/iCloud and symlink escapes. Regenerable caches can be deleted
-permanently; everything else (large files, duplicates, archives) goes to the Trash. Docker's disk image is report-only.
+permanently; everything else (large files, duplicates, archives) goes to the Trash. Docker's disk image is never touched
+directly: the Docker module lists images, containers, volumes and build cache via `docker system df` and removes only what
+you select through the Docker CLI (`docker rm`, `rmi`, `volume rm`, `builder prune`), never forcing anything in use.
 
 ## License
 MIT — see [LICENSE](LICENSE). DeepCleaner deletes files: review what you select before cleaning. It is provided as is, without warranty.

@@ -9,7 +9,6 @@ import Testing
         #expect(Cleaner.mode(for: ScanItem(url: url, size: 1, category: .userCaches), deleteRegenerablePermanently: false) == .trash)
         #expect(Cleaner.mode(for: ScanItem(url: url, size: 1, category: .largeFile), deleteRegenerablePermanently: true) == .trash)
         #expect(Cleaner.mode(for: ScanItem(url: url, size: 1, category: .trash), deleteRegenerablePermanently: false) == .permanent)
-        #expect(Cleaner.mode(for: ScanItem(url: url, size: 1, category: .dockerData), deleteRegenerablePermanently: true) == .skip)
     }
 
     @Test func dryRunLeavesFilesAlone() throws {
